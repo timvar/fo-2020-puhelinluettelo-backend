@@ -1,0 +1,19 @@
+{
+  "name": "fo-2020-puhelinluettelo-backend",
+  "version": "1.0.0",
+  "description": "fullstack-mooc-2020-part3",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Timo Varila",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
