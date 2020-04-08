@@ -11,14 +11,9 @@ app.use(express.static('build'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
 
-const generateId = () => {
-  return Math.floor(Math.random() * 1000000)
-}
-
 let persons = []
 
 app.get('/api/persons', (req, res) => {
-  console.log('GET ALL')
   Person.find({})
     .then(persons => {
       res.json(persons.map(person => person.toJSON()));
@@ -54,19 +49,14 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
-  if (persons.find(person => person.name === body.name)) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    })
-  }
-
-  const person = {
+  const person = new Person({
     name: body.name,
-    number: body.number,
-    id: generateId()
-  }
-  persons = persons.concat(person)
-  res.json(person)
+    number: body.number
+  })
+
+  person.save().then(person => {
+    res.json(person.toJSON());
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
