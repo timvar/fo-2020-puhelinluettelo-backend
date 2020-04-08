@@ -22,12 +22,12 @@ const Person = mongoose.model('Person', personSchema)
 if (process.argv.length === 3) {
   console.log('phonebook:')
   Person.find({})
-  .then(persons => {
-    persons.forEach(person => {
-      console.log(`${person.name} ${person.number}`)
+    .then(persons => {
+      persons.forEach(person => {
+        console.log(`${person.name} ${person.number}`)
+      })
+      mongoose.connection.close()
     })
-    mongoose.connection.close()
-  })
 }
 
 if (process.argv.length === 5) {

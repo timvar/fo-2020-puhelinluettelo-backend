@@ -9,9 +9,9 @@ app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('body', function (req) { return JSON.stringify(req.body) })
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   Person.find({})
     .then(persons => {
       res.send(`<p>Phonebook has info for ${persons.length} people<p> <p>${new Date()}<p>`)
@@ -22,7 +22,7 @@ app.get('/info', (req, res) => {
 app.get('/api/persons', (req, res, next) => {
   Person.find({})
     .then(persons => {
-      res.json(persons.map(person => person.toJSON()));
+      res.json(persons.map(person => person.toJSON()))
     })
     .catch(error => next(error))
 })
@@ -59,7 +59,7 @@ app.post('/api/persons', (req, res, next) => {
 
   person.save()
     .then(person => {
-      res.json(person.toJSON());
+      res.json(person.toJSON())
     })
     .catch(error => next(error))
 })
@@ -79,7 +79,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
