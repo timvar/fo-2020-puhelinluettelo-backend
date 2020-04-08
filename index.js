@@ -11,6 +11,13 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
 
+app.get('/info', (req, res) => {
+  Person.find({})
+    .then(persons => {
+      res.send(`<p>Phonebook has info for ${persons.length} people<p> <p>${new Date()}<p>`)
+    })
+    .catch(error => next(error))
+})
 
 app.get('/api/persons', (req, res, next) => {
   Person.find({})
@@ -64,10 +71,10 @@ app.put('/api/persons/:id', (req, res, next) => {
   }
 
   Person.findByIdAndUpdate(req.params.id, person, { new: true })
-  .then(updatedPerson => {
-    res.json(updatedPerson.toJSON())
-  })
-  .catch(error => next(error))
+    .then(updatedPerson => {
+      res.json(updatedPerson.toJSON())
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
